@@ -1,102 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mesin Pencari Lirik Asli</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rycl Editor</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-<body class="bg-slate-900 text-white font-sans min-h-screen flex items-center justify-center p-4">
-
-    <div id="root" class="w-full max-w-md"></div>
-
-    <script type="text/babel">
-        function App() {
-            const [query, setQuery] = React.useState('');
-            const [result, setResult] = React.useState(null);
-            const [loading, setLoading] = React.useState(false);
-
-            const cariLirikAsli = async (e) => {
-                e.preventDefault();
-                if (!query) return;
-                setLoading(true);
-                setResult(null);
-
-                try {
-                    // Nembak langsung ke API lirik publik gratisan (bukan data bohongan)
-                    const res = await fetch(`https://api.lyrics.ovh/v1/search?q=${encodeURIComponent(query)}`);
-                    const data = await res.json();
-                    
-                    if (data.data && data.data.length > 0) {
-                        // Ambil baris pertama dari hasil pencarian
-                        const lagu = data.data[0];
-                        
-                        // Fetch lirik aslinya
-                        const lirikRes = await fetch(`https://api.lyrics.ovh/v1/${lagu.artist.name}/${lagu.title}`);
-                        const lirikData = await lirikRes.json();
-
-                        setResult({
-                            title: lagu.title,
-                            artist: lagu.artist.name,
-                            lyrics: lirikData.lyrics || "Lirik tidak ditemukan untuk lagu ini, coba lagu lain!"
-                        });
-                    } else {
-                        setResult({ error: "Lagu gak ketemu. Coba cek typo atau ketik musisinya juga." });
-                    }
-                } catch (err) {
-                    setResult({ error: "Gagal nyambung ke server API. Coba lagi, Rycl!" });
-                } finally {
-                    setLoading(false);
-                }
-            };
-
-            return (
-                <div class="bg-slate-800/80 backdrop-blur border border-slate-700 p-6 rounded-2xl shadow-2xl">
-                    <header class="text-center mb-6">
-                        <h1 class="text-2xl font-bold text-emerald-400">Real Lyrics Finder 🎵</h1>
-                        <p class="text-xs text-slate-400 mt-1">Single File React - Siap Deploy ke Vercel</p>
-                    </header>
-
-                    <form onSubmit={cariLirikAsli} class="flex gap-2 mb-4">
-                        <input 
-                            type="text" 
-                            placeholder="Contoh: Oasis - Stand By Me" 
-                            value={query}
-                            onChange={(e) => setQuery(e.target.value)}
-                            class="flex-1 px-3 py-2 rounded-xl bg-slate-950 text-white text-sm border border-slate-700 focus:outline-none focus:border-emerald-400"
-                        />
-                        <button type="submit" class="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold px-4 py-2 rounded-xl text-sm transition">
-                            Cari
-                        </button>
-                    </form>
-
-                    {loading && <p class="text-emerald-400 text-center animate-pulse text-xs my-4">Lagi nyari lirik asli di internet...</p>}
-
-                    {result && (
-                        <div class="mt-4 border-t border-slate-700 pt-4 max-h-80 overflow-y-auto">
-                            {result.error ? (
-                                <p class="text-red-400 text-center text-sm">{result.error}</p>
-                            ) : (
-                                <div>
-                                    <h2 class="font-bold text-center text-emerald-300 text-lg">{result.title}</h2>
-                                    <p class="text-xs text-slate-400 text-center mb-4">Oleh: {result.artist}</p>
-                                    <pre class="text-center text-xs whitespace-pre-line text-slate-300 font-sans leading-relaxed">
-                                        {result.lyrics}
-                                    </pre>
-                                </div>
-                            )}
-                        </div>
-                    )}
-                </div>
-            );
-        }
-
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
+<body class="bg-gray-950 text-gray-100">
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
 </body>
 </html>
 
